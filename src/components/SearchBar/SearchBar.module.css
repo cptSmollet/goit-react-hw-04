@@ -1,0 +1,49 @@
+.searchBar {
+  padding: 10px;
+  background-color: #3f51b5;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.input {
+  flex: 1;
+  padding: 8px 8px 8px 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 16px;
+  color: #000;
+  background-color: #fff;
+}
+
+.button {
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  transform: translateY(-50%);
+  border: none;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  color: #000;
+  font-size: 18px;
+}
