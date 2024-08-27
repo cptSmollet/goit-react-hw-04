@@ -1,36 +1,36 @@
-.overlay {
+.Overlay {
+  background-color: rgba(0, 0, 0, 0.75);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.modal {
-  position: relative;
-  background: #fff;
+.Modal {
+  background: white;
   padding: 20px;
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 8px;
+  position: relative;
+}
+
+.Image {
+  width: 100%;
+  height: auto;
   border-radius: 8px;
 }
 
-.modal img {
-  max-width: 100%;
-  max-height: 80vh;
-  display: block;
-}
-
-.closeBtn {
+.CloseButton {
   position: absolute;
   top: 10px;
   right: 10px;
+  background: transparent;
   border: none;
-  background: #ff6b08;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
+  font-size: 24px;
   cursor: pointer;
 }

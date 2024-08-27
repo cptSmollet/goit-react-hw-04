@@ -1,40 +1,41 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styles from './ImageModal.module.css';
+import ReactModal from 'react-modal';
+import css from './ImageModal.module.css';
 
-function ImageModal({ largeImageURL, alt, onClose }) {
+ReactModal.setAppElement('#root'); // Это необходимо для того, чтобы избежать проблем с доступностью
+
+const ImageModal = ({ largeImageURL, tags, isOpen, onClose }) => {
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Escape') {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleEscape);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', handleEscape);
     };
   }, [onClose]);
 
-  const handleBackdropClick = (e) => {
-    if (e.currentTarget === e.target) {
-      onClose();
-    }
-  };
-
   return (
-    <div className={styles.overlay} onClick={handleBackdropClick}>
-      <div className={styles.modal}>
-        <img src={largeImageURL} alt={alt} />
-        <button type="button" className={styles.closeBtn} onClick={onClose}>Close</button>
-      </div>
-    </div>
+    <ReactModal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      className={css.Modal}
+      overlayClassName={css.Overlay}
+    >
+      <img src={largeImageURL} alt={tags} className={css.Image} />
+      <button onClick={onClose} className={css.CloseButton}>Close</button>
+    </ReactModal>
   );
-}
+};
 
 ImageModal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
-  alt: PropTypes.string,
+  tags: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

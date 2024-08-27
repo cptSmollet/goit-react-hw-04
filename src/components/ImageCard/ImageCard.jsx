@@ -1,28 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './ImageCard.module.css';
+import css from './ImageCard.module.css';
 
-function ImageCard({ image, onClick }) {
+const ImageCard = ({ image, onImageClick }) => {
+  const { webformatURL, tags, largeImageURL } = image;
+
   return (
-    <li className={styles.card} onClick={() => onClick(image.urls.regular, image.alt_description)}>
+    <li className={css.ImageCard}>
       <img
-        src={image.urls.small}
-        alt={image.alt_description}
-        className={styles.image}
+        src={webformatURL}
+        alt={tags}
+        className={css.Image}
+        onClick={() => onImageClick(largeImageURL)}
       />
     </li>
   );
-}
+};
 
 ImageCard.propTypes = {
   image: PropTypes.shape({
-    urls: PropTypes.shape({
-      small: PropTypes.string.isRequired,
-      regular: PropTypes.string.isRequired, 
-    }).isRequired,
-    alt_description: PropTypes.string,
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
   }).isRequired,
-  onClick: PropTypes.func.isRequired, 
+  onImageClick: PropTypes.func.isRequired,
 };
 
 export default ImageCard;
