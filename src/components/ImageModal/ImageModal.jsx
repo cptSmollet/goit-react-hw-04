@@ -1,42 +1,32 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
-import css from './ImageModal.module.css';
+import css from "./ImageModal.module.css";
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 
-ReactModal.setAppElement('#root'); // Это необходимо для того, чтобы избежать проблем с доступностью
-
-const ImageModal = ({ largeImageURL, tags, isOpen, onClose }) => {
-  useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-    return () => {
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [onClose]);
-
+const ImageModal = ({ isOpenModal, closeModal, onPhoto }) => {
   return (
-    <ReactModal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      className={css.Modal}
-      overlayClassName={css.Overlay}
+    <Modal
+      isOpen={isOpenModal}
+      onRequestClose={closeModal}
+      style={{
+        overlay: {
+          backgroundColor: "rgba(112, 211, 221, 0.3)",
+        },
+        content: {
+          borderRadius: "8px",
+          width: "50%",
+          top: "50%",
+          left: "50%",
+          right: "auto",
+          bottom: "auto",
+          background: "transparent",
+          transform: "translate(-50%, -50%)",
+        },
+      }}
+      closeTimeoutMS={200}
     >
-      <img src={largeImageURL} alt={tags} className={css.Image} />
-      <button onClick={onClose} className={css.CloseButton}>Close</button>
-    </ReactModal>
+      <img className={css.photo} src={onPhoto.url} alt={onPhoto.alt} />
+    </Modal>
   );
-};
-
-ImageModal.propTypes = {
-  largeImageURL: PropTypes.string.isRequired,
-  tags: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default ImageModal;

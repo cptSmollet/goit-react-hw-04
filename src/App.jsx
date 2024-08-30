@@ -1,71 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import SearchBar from './components/SearchBar/SearchBar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import Loader from './components/Loader/Loader';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage';
-import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
-import ImageModal from './components/ImageModal/ImageModal';
-import './App.css';
+import { useEffect, useState } from "react";
+import { fetchPhotosApi } from "./components/services/photos-api";
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [largeImageURL, setLargeImageURL] = useState('');
-  const [modalAlt, setModalAlt] = useState('');
+  const [searchValue, setSearchValue] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [onPhoto, setOnPhoto] = useState({ url: "", alt: "" });
 
-  const API_KEY = '3PIRjONUDiAJq5bwFwklGrJZ3QjXHxwdq--MHhXmans';
-  const BASE_URL = `https://api.unsplash.com/search/photos?client_id=${API_KEY}`;
+  const openModal = () => {
+    setIsOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setIsOpenModal(false);
+  };
 
   useEffect(() => {
-    if (!query) return;
-
-    const fetchImages = async () => {
-      setIsLoading(true);
-
+    if (searchValue.trim() === "") return;
+    const fetchPhotosBySearchValue = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}&query=${query}&page=${page}&per_page=12`);
-        setImages((prevImages) => [...prevImages, ...response.data.results]);
+        setLoading(true);
+
+        const data = await fetchPhotosApi(searchValue, pageNumber);
+
+        setPhotos((prev) => [...prev, ...data.results]);
+        setTotalPage(data.total_pages);
       } catch (error) {
-        setError('Failed to fetch images.');
+        setError(error.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
+    fetchPhotosBySearchValue();
+  }, [searchValue, pageNumber]);
 
-    fetchImages();
-  }, [query, page]);
-
-  const handleSearchSubmit = (searchQuery) => {
-    setQuery(searchQuery);
-    setPage(1);
-    setImages([]);
-    setError(null);
+  const onSubmit = (searchTerm) => {
+    setPhotos([]);
+    setSearchValue(searchTerm);
+    setPageNumber(1);
   };
+  const onLoadMore = () => {
+    setPageNumber((pageNumber) => pageNumber + 1);
 
-  const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-
-  const toggleModal = (largeImageURL = '', alt = '') => {
-    setLargeImageURL(largeImageURL);
-    setModalAlt(alt);
-    setShowModal((prevShowModal) => !prevShowModal);
+    console.log(pageNumber);
   };
 
   return (
-    <div className="App">
-      <SearchBar onSubmit={handleSearchSubmit} />
-      {error && <ErrorMessage message={error} />}
-      <ImageGallery images={images} onImageClick={toggleModal} />
-      {isLoading && <Loader />}
-      {images.length > 0 && !isLoading && <LoadMoreBtn onClick={handleLoadMore} />}
-      {showModal && <ImageModal largeImageURL={largeImageURL} alt={modalAlt} onClose={toggleModal} />}
-    </div>
+    <>
+      <SearchBar onSubmit={onSubmit} />
+      <ImageModal
+        isOpenModal={isOpenModal}
+        closeModal={closeModal}
+        onPhoto={onPhoto}
+      />
+      {loading && <Loader />}
+      {error !== null && <ErrorMessage errorMessage={error} />}
+      {photos.length > 0 && (
+        <ImageGallery
+          photos={photos}
+          openModal={openModal}
+          setOnPhoto={setOnPhoto}
+        />
+      )}
+      {pageNumber < totalPage && <LoadMoreBtn onLoadMore={onLoadMore} />}
+    </>
   );
 }
 

@@ -1,31 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ImageCard from '../ImageCard/ImageCard';
-import styles from './ImageGallery.module.css';
+import css from "./ImageGallery.module.css";
+import ImageCard from "../ImageCard/ImageCard";
 
-function ImageGallery({ images, onImageClick }) {
+const ImageGallery = ({ photos, openModal, setOnPhoto }) => {
   return (
-    <div>
-      {images.length === 0 ? (
-        <p className={styles.noImages}>No images found</p>
-      ) : (
-        <ul className={styles.gallery}>
-          {images.map((image) => (
+    <ul className={css.photosList}>
+      {photos.map((photo) => {
+        return (
+          <li key={photo.id}>
             <ImageCard
-              key={image.id}
-              image={image}
-              onClick={onImageClick} 
+              url={photo.urls}
+              alt={photo.alt_description}
+              openModal={openModal}
+              setOnPhoto={setOnPhoto}
             />
-          ))}
-        </ul>
-      )}
-    </div>
+          </li>
+        );
+      })}
+    </ul>
   );
-}
-
-ImageGallery.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onImageClick: PropTypes.func.isRequired, 
 };
 
 export default ImageGallery;

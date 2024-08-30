@@ -1,49 +1,40 @@
 .searchBar {
+  text-align: center;
   padding: 10px;
-  background-color: #3f51b5;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
 }
 
-.form {
-  display: flex;
-  align-items: center;
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
+.Input {
+  width: 300px;
+  margin-right: 20px;
+  background-color: azure;
+  padding: 7px;
+  border: 1px solid #000000;
+  border-radius: 5px;
 }
 
-.input {
-  flex: 1;
-  padding: 8px 8px 8px 40px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.searchInput:hover,
+.searchInput:focus {
   outline: none;
-  font-size: 16px;
-  color: #000;
-  background-color: #fff;
+  border: 1px solid #6087fa;
 }
 
-.button {
-  position: absolute;
-  top: 50%;
-  left: -5px;
-  transform: translateY(-50%);
-  border: none;
-  background-color: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.Btn {
+  padding: px 15px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  background-color: #e05d00;
 }
 
-.icon {
-  color: #000;
-  font-size: 18px;
+.searchBtn:hover,
+.searchBtn:focus {
+  outline: none;
+  border: 1px solid #6087fa;
+  cursor: pointer;
+  color: #6087fa;
+  transition: color linear 250ms;
+}
+
+.formErrorMessage {
+  color: red;
 }

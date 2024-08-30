@@ -1,46 +1,55 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styles from './SearchBar.module.css';
-import { FaSearch } from 'react-icons/fa';  // Иконка-лупа
+import css from "./SearchBar.module.css";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
 
-function SearchBar({ onSubmit }) {
-  const [query, setQuery] = useState('');
 
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
+const FeedbackSchema = Yup.object().shape({
+  searchTerm: Yup.string()
+    .min(2, "Too Short! Min 2 symbols.")
+    .max(50, "Too Long! Max 50 symbols.")
+    .required("Required! Enter any word..."),
+});
+
+const initialValues = {
+  searchTerm: "",
+};
+
+const SearchBar = ({ onSubmit }) => {
+  const handleSubmit = (values, actions) => {
+    onSubmit(values.searchTerm);
+    actions.resetForm();
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (query.trim() === '') {
-      return;
-    }
-    onSubmit(query);
-    setQuery('');
-  };
-
   return (
-    <header className={styles.searchBar}>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <button type="submit" className={styles.button}>
-          <FaSearch className={styles.icon} />
-        </button>
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          className={styles.input}
-          placeholder="Search images and photos"
-          autoComplete="off"
-          autoFocus
-        />
-      </form>
-    </header>
+    <div>
+      <header className={css.searchBar}>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={FeedbackSchema}
+        >
+          <Form>
+            <label className={css.formLabel}>
+              <Field
+                className={css.Input}
+                type="text"
+                name="searchTerm"
+                placeholder="Search images and photos"
+              />
+            </label>
+            <button className={css.Btn} type="submit">
+              Search
+            </button>
+            <br />
+            <ErrorMessage
+              className={css.formErrorMessage}
+              name="searchTerm"
+              component="span"
+            />
+          </Form>
+        </Formik>
+      </header>
+    </div>
   );
-}
-
-SearchBar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchBar;
