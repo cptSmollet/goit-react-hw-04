@@ -5,14 +5,16 @@ const ImageCard = ({ url, alt, openModal, setOnPhoto }) => {
     setOnPhoto({ url: url.regular, alt: alt });
     openModal();
   };
+
   return (
-    <div onClick={handleClick} className={css.wrapper}>
+    <div className={css.wrapper}>
       <img
         className={css.picture}
         src={url.small}
         alt={alt}
         width={320}
         height={220}
+        onClick={handleClick} 
       />
     </div>
   );
